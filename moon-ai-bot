@@ -1,0 +1,33 @@
+// bot.js
+
+const TelegramBot = require('node-telegram-bot-api');
+const token = 'YOUR_TELEGRAM_BOT_TOKEN'; // Replace with your bot token
+const bot = new TelegramBot(token, { polling: true });
+
+// Inspirational quotes
+const quotes = [
+    "Your time is limited, so don’t waste it living someone else’s life. - Steve Jobs",
+    "The key to success is to always believe in your hard work. - Unknown",
+    "Life is like a book, and those who do not travel read only one page. - St. Augustine",
+    "You can do what you think; just believe in yourself. - Unknown"
+];
+
+// Welcome message for the bot
+bot.onText(/\/start/, (msg) => {
+    const chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'Hello! I am your helpful bot. You can ask me anything or type /quote to receive an inspirational quote.');
+});
+
+// Responding to user messages
+bot.on('message', (msg) => {
+    const chatId = msg.chat.id;
+    
+    // If the user sends "quote", send an inspirational quote
+    if (msg.text.toLowerCase() === '/quote') {
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        bot.sendMessage(chatId, randomQuote);
+    } else {
+        // General response for other messages
+        bot.sendMessage(chatId, `You said: ${msg.text}. Type /quote to get an inspirational quote!`);
+    }
+});
